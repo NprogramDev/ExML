@@ -1,0 +1,145 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Easy Markup Language",
+	"patterns": [
+		{
+			"include": "#fileImports"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#attributes"
+		},
+		{
+			"include": "#symbols"
+		}
+		
+	],
+	"repository": {
+		"comments":{
+			"patterns": [
+				{
+					"captures": {
+						"0":{
+							"name":"punctuation.definition.comment.exml"
+						}
+					},
+					"match": "\\$\\$\\$\\$\\$\\$",
+					"name": "comment.block.empty.exml"
+				},
+				{
+					"include": "#comments-inline"	
+				}
+			]
+		},
+		"comments-inline":{
+			"patterns": [
+				{
+					"begin": "\\$\\$\\$",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.exml"
+						}
+					},
+					"end": "\\$\\$\\$",
+					"name": "comment.block.exml"
+				}
+			]
+		},
+		"attributes":{
+			"patterns":[
+				{
+					"begin": "%",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.attribute.exml"
+						}
+					},
+					"end": "=",
+					"name": "entity.other.attribute-name.exml"
+				},
+				{
+					
+					"name": "string.quoted.double.exml",
+					"match": "(?<=(%.*=)).*"
+				}
+			]
+		},
+		"symbols":{
+			"patterns":[
+				{
+					"name": "punctuation.definition.tag.begin.exml",
+					"match": "(?<!\\$)\\$(?!\\$)"
+				},
+				{
+					"name": "punctuation.definition.tag.end.exml",
+					"match": "§"
+				},
+				{
+					"name":"entity.name.tag",
+					"comment": "This is the tag Name of the HTML Object",
+					"match":"(?<=\\$).*?(?=!|$|§| )"
+				},
+				{
+					"name": "keyword.control",
+					"comment": "This is the Name of the HTML Object",
+					"match": "(?<=(\\$.*!.*!.*!)).*?(?=§|!| |$)"
+				},
+				{
+					"name": "entity.name.function",
+					"comment": "This is the ID of the HTML Object",
+					"match": "(?<=(\\$.*!.*!)).*?(?=§|!| |$)"
+				},
+				{
+					"name": "entity.name.class",
+					"comment": "This is the class Name of the HTML Object",
+					"match": "(?<=(\\$.*!)).*?(?=§|!| |$)"
+				}
+			]
+		},
+		"fileImports": {
+			"patterns":[
+				{
+					"begin": "(?<=\\$script)",
+					"end": "(?=§)",
+					"patterns": [
+						{
+							"name": "constant.regexp",
+							"match": "\\.js"
+						},
+						{
+							"name": "keyword.operator.new",
+							"match": ";"
+						},
+						{
+							"name":"constant.character.escape",
+							"match": ".*?(?=\\.js)"
+						}
+						
+					]
+				},
+				{
+					"begin": "(?<=\\$link)",
+					"end": "(?=§)",
+					"patterns": [
+						{
+							"name": "constant.regexp",
+							"match": "\\.css"
+						},
+						{
+							"name": "keyword.operator.new",
+							"match": ";"
+						},
+						{
+							"name":"constant.character.escape",
+							"match": ".*?(?=\\.css)"
+						}
+						
+					]
+				}
+			]
+		}
+	},
+	"scopeName": "source.exml"
+}

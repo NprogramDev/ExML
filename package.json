@@ -1,0 +1,30 @@
+{
+  "name": "exmlsyntax",
+  "displayName": "ExML Syntax",
+  "description": "A Extension that highlights ExML syntax",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "languages": [{
+      "id": "exml",
+      "aliases": ["Easy HTML", "exml","ExML"],
+      "extensions": [".exml"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "exml",
+      "scopeName": "source.exml",
+      "path": "./syntaxes/exml.tmLanguage.json"
+    }],
+    "commands": [{
+      "command": "extension.translateExMLToHTML",
+      "title": "Translate ExML to HTML"
+    }]
+  }
+}
