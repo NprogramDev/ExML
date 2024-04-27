@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 
+let headRegistry = []
 
 class ExcMLObj {
     constructor() {
@@ -12,10 +13,20 @@ class ExcMLObj {
         this.name = "";
         this.children = [];
         this.innerEXCML = "";
+        this.isInHead = false;
     }
     toHTML(){
-        let rt = "<!DOCTYPE html> \n<html>";
-        rt += this.toXML(true);
+        headRegistry = [];
+        let result = this.toXML(true);
+        let rt = "<!DOCTYPE html> \n<html><head>\n";
+        for(let i = 0; i < headRegistry.length; i++){
+            headRegistry[i].tagName = headRegistry[i].tagName.split("#").join("");
+            headRegistry[i].isInHead = false;
+            headRegistry[i] = headRegistry[i].toXML(true);
+        }
+        rt += headRegistry.join("\n");
+        rt += "</head>\n";
+        rt += result;
         rt += "\n</html>";
         return rt;
     }
@@ -55,7 +66,10 @@ class ExcMLObj {
                     }
                     break;
             }
-
+            if(this.isInHead) {
+                headRegistry.push(this);
+                return "";
+            }
         }
 
         const excml = this.innerEXCML.split("$%");
@@ -116,6 +130,10 @@ class ExcML {
         const args = first[0].split("!"); // Split by !
         rt.tagName = args[0] ? args[0] : "div"; // First Arg is always the tag name
         rt.tagName = rt.tagName.trim();
+        rt.isInHead = rt.tagName.startsWith("#");
+        if(rt.tagName == "title"){
+            rt.isInHead = true;
+        }
         rt.class = args[1] ? args[1].split(/(?<!\\),/).join(" ") : ""; // Second arg is always the class
         rt.id = args[2] ? args[2] : ""; // Third arg is always the id
         rt.name = args[3] ? args[3] : ""; // Fourth arg is always the name
