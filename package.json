@@ -11,6 +11,10 @@
     "Other"
   ],
   "main": "./src/extension.js",
+  "activationEvents": [
+    "onCommand:extension.translateExMLToHTML", 
+    "onLanguage:exml"
+  ],
   "contributes": {
     "languages": [{
       "id": "exml",
